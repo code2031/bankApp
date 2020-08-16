@@ -5,6 +5,7 @@ import { validateSignup, validateSignin, validateEdit } from '../middlewares/use
 const app = express.Router()
 
 app.post('/register', validateSignup, user.userRegister);
-app.get('/user/:id', user.getSingleUser);
+app.get('/users', user.getAllUsers);
+app.get('/users/:id', user.getSingleUser);
 
 export default app;

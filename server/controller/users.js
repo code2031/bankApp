@@ -43,13 +43,29 @@ export default class users {
       };
       createUser = await db.query(sql, values, (err, result) => {
         if (err) throw err;
+        if (result) {
         res.status(201).json({
           message: "User successfully created",
-          user: result,
-          token: createToken(createUser),
+          token: createToken(createUser)
         });
+        }
       });
     });
+  }
+
+  static async getAllUsers(req, res) {
+    const id = parseInt(req.params.id);
+    const sql = `SELECT * FROM users`;
+    await db.query(sql, (err, result) => {
+      if (err) throw err;
+      if (result) {
+        return res.status(200).json({
+          message: "Success",
+          result : result
+        });
+      } 
+    }); 
+
   }
 
   static async getSingleUser(req, res) {
@@ -60,9 +76,11 @@ export default class users {
       if (result) {
         return res.status(200).json({
           message: "Success",
-          user: result,
+          result : result
         });
-      }
-    });
+      } 
+    }); 
+
   }
+  
 }
