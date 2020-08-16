@@ -24,7 +24,7 @@ User can apply for a loan
 - [NodeJS](http://nodejs.org/en) is a JavaScript runtime built on Chrome's V8 JavaScript engine
 - [Express JS](http://express.com) A minimalist web framework
 - [Sequelize](http://docs.sequelizejs.com/) Sequelize is a promise-based ORM for Node.js v4 and up. It supports the dialects PostgreSQL, MySQL, SQLite and MSSQL and features solid transaction support, relations, read replication and more.
-- [PostgreSQL](https://www.postgresql.org/) A powerful, open source object-relational database system.
+- [Mysql](https://www.mysql.com/) A powerful, open source object-relational database system.
 - [ESLint](eslint.org) provides a pluggable linting utility for JavaScript.
 - [Mocha](https://mochajs.org/) Mocha is a feature-rich JavaScript test framework running on [NodeJS](nodejs.org/en) for testing [Javascript](javascript.com) applications.
 
