@@ -1,13 +1,9 @@
-import db from "../connection/myConnect";
+import { User } from '../models';
 import { validName, validEmail, validPhoneNumber } from "./regEx";
 
-const checkEmail = (email) => {
-  const sql = `SELECT * FROM users WHERE email = '${email}'`;
-   db.query(sql, (err, result) => {
-    if (err) throw err; 
-      return result; 
-  });
-};
+const checkEmail = (email) => User.findOne({
+  where: { email }
+});
 
 /**
  * @description validate user details
@@ -65,12 +61,13 @@ export default class validations {
       signupErrors.email.push("Invalid Email Format");
     }
 
-    const emailAlreadyExist = checkEmail(email);
-console.log(emailAlreadyExist);
+    /* const emailAlreadyExist = checkEmail(email); 
+    console.log('hello email: ', emailAlreadyExist);
+/*  
     if (emailAlreadyExist) {
       signupErrors.email = [];
       signupErrors.email.push("Email already exist");
-    }
+    } */
 
     if (!password || password.length < 3) {
       signupErrors.password = [];

@@ -15,6 +15,7 @@ User can deposit money  into his/her own account
 User can withdraw money from  his/her own account
 User can check his/her account balance
 User can transfer money into another user's account
+User can receive money from another user's account
 User can apply for a loan
 
 ## Technologies

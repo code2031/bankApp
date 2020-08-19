@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import createToken from "../helpers/createToken";
-import db from "../connection/myConnect";
+import {User, Transaction} from '../models';
 
 const saltRounds = 10;
 
@@ -19,68 +19,31 @@ const accountNumber = () => {
 export default class users {
   static async userRegister(req, res) {
     let createUser;
-    const {
-      firstName,
-      lastName,
-      middleName,
-      phoneNumber,
-      email,
-      password,
-    } = req.body;
-    const regDate = new Date().toDateString();
+    const { firstName, lastName, middleName, phoneNumber, email, password } = req.body; 
     await bcrypt.hash(password, saltRounds, async (error, hash) => {
-      const sql = "INSERT INTO users SET ?";
-      const values = {
+      createUser = User.create({
         firstName,
         lastName,
         middleName,
         email,
-        password: hash,
+        password: hash, 
         phoneNumber,
         accountNumber: accountNumber(),
-        role: 0,
-        regDate,
-      };
-      createUser = await db.query(sql, values, (err, result) => {
-        if (err) throw err;
-        if (result) {
-        res.status(201).json({
-          message: "User successfully created",
-          token: createToken(createUser)
-        });
-        }
+        role: 0
+      });
+      return res.status(201).json({
+        message: 'User successfully created',
+        token: await createToken(createUser.dataValues)
       });
     });
   }
 
   static async getAllUsers(req, res) {
-    const id = parseInt(req.params.id);
-    const sql = `SELECT * FROM users`;
-    await db.query(sql, (err, result) => {
-      if (err) throw err;
-      if (result) {
-        return res.status(200).json({
-          message: "Success",
-          result : result
-        });
-      } 
-    }); 
-
+    const id = parseInt(req.params.id); 
   }
 
   static async getSingleUser(req, res) {
-    const id = parseInt(req.params.id);
-    const sql = `SELECT * FROM users WHERE id = ${id}`;
-    await db.query(sql, (err, result) => {
-      if (err) throw err;
-      if (result) {
-        return res.status(200).json({
-          message: "Success",
-          result : result
-        });
-      } 
-    }); 
-
+    const id = parseInt(req.params.id); 
   }
   
 }
