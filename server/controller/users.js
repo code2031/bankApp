@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs";
-import createToken from "../helpers/createToken";
-import {User, Transaction} from '../models';
+import bcrypt from 'bcryptjs';
+import createToken from '../helpers/createToken';
+import Model from '../models' ;
 
 const saltRounds = 10;
 
@@ -16,12 +16,12 @@ const accountNumber = () => {
  * @description users controller
  * class users
  */
-export default class users {
+export default class Users {
   static async userRegister(req, res) {
-    let createUser;
+    let createUser; 
     const { firstName, lastName, middleName, phoneNumber, email, password } = req.body; 
     await bcrypt.hash(password, saltRounds, async (error, hash) => {
-      createUser = User.create({
+    createUser = await Model.user.create({
         firstName,
         lastName,
         middleName,

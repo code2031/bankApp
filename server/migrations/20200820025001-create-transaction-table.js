@@ -1,6 +1,8 @@
+'use strict';
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('transaction', {
+      return queryInterface.createTable('transaction', { 
         id: {
           type: Sequelize.INTEGER,
           allowNull: false,
@@ -8,11 +10,11 @@ module.exports = {
           primaryKey: true
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
       accountNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -22,7 +24,7 @@ module.exports = {
         }
       },
       amount: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -32,7 +34,7 @@ module.exports = {
         }
       },
       accountName: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -43,13 +45,11 @@ module.exports = {
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE
-         });
-     
+       });
+   
   },
 
   down: (queryInterface, Sequelize) => {
-   
       return queryInterface.dropTable('transaction');
-    
   }
 };

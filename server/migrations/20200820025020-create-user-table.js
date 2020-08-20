@@ -1,9 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => { 
-
-      return queryInterface.createTable('users', { 
+  up: (queryInterface, Sequelize) => {
+      return queryInterface.createTable('user', { 
         id: {
           type: Sequelize.INTEGER,
           allowNull: false,
@@ -11,7 +10,7 @@ module.exports = {
           primaryKey: true
       },
        firstName: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -21,7 +20,7 @@ module.exports = {
         }
       },
       lastName: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -31,7 +30,7 @@ module.exports = {
         }
       },
       middleName: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -41,7 +40,7 @@ module.exports = {
         }
       },
       email: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(20),
         allowNull: false,
         unique: true,
         validate: {
@@ -55,7 +54,7 @@ module.exports = {
         }
       },
       password: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -65,8 +64,9 @@ module.exports = {
         }
       },
       phoneNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
+        unique: true,
         validate: {
           notEmpty: {
             args: true,
@@ -75,7 +75,7 @@ module.exports = {
         }
       },
       accountNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -85,15 +85,15 @@ module.exports = {
         }
       },
       accountBalance: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: true
       },
       loanBalance: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: true
       },
       role: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: {
@@ -103,11 +103,12 @@ module.exports = {
         }
       },
       createdAt: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
-      })
+      updatedAt: Sequelize.DATE
+      });
+   
   },
 
-  down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('users');
+  down: (queryInterface, Sequelize) => { 
+      return queryInterface.dropTable('user');
   }
 };

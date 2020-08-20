@@ -6,8 +6,8 @@ dotenv.config();
 const secret = process.env.JWT_KEY;
 
 export const createToken = (userData) => {
-  const token = jwt.sign({
-    id: userData.id,
+  const token = jwt.sign({ 
+    userId: userData.id,
     firstName: userData.firstName,
     lastName: userData.lastName,
     middleName: userData.middleName,

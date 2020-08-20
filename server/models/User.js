@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-const User = sequelize.define('User', {
+const User = sequelize.define('user', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -7,7 +7,7 @@ const User = sequelize.define('User', {
     primaryKey: true
 },
  firstName: {
-  type: DataTypes.STRING,
+  type: DataTypes.STRING(20),
   allowNull: false,
   validate: {
     notEmpty: {
@@ -17,7 +17,7 @@ const User = sequelize.define('User', {
   }
 },
 lastName: {
-  type: DataTypes.STRING,
+  type: DataTypes.STRING(20),
   allowNull: false,
   validate: {
     notEmpty: {
@@ -27,7 +27,7 @@ lastName: {
   }
 },
 middleName: {
-  type: DataTypes.STRING,
+  type: DataTypes.STRING(20),
   allowNull: false,
   validate: {
     notEmpty: {
@@ -37,7 +37,7 @@ middleName: {
   }
 },
 email: {
-  type: DataTypes.STRING,
+  type: DataTypes.STRING(20),
   allowNull: false,
   unique: true,
   validate: {
@@ -51,7 +51,7 @@ email: {
   }
 },
 password: {
-  type: DataTypes.STRING,
+  type: DataTypes.STRING(255),
   allowNull: false,
   validate: {
     notEmpty: {
@@ -61,8 +61,9 @@ password: {
   }
 },
 phoneNumber: {
-  type: DataTypes.INTEGER,
+  type: DataTypes.STRING(255),
   allowNull: false,
+  unique: true,
   validate: {
     notEmpty: {
       args: true,
@@ -71,7 +72,7 @@ phoneNumber: {
   }
 },
 accountNumber: {
-  type: DataTypes.INTEGER,
+  type: DataTypes.STRING(255),
   allowNull: false,
   validate: {
     notEmpty: {
@@ -81,15 +82,15 @@ accountNumber: {
   }
 },
 accountBalance: {
-  type: DataTypes.INTEGER,
+  type: DataTypes.STRING(255),
   allowNull: true
 },
 loanBalance: {
-  type: DataTypes.INTEGER,
+  type: DataTypes.STRING(255),
   allowNull: true
 },
 role: {
-  type: DataTypes.INTEGER,
+  type: DataTypes.STRING(255),
   allowNull: false,
   validate: {
     notEmpty: {
@@ -98,10 +99,12 @@ role: {
     }
   }
 },
-}, {});
+}, {
+  freezeTableName: true,
+});
 User.associate = function (models) {
   // associations can be defined here
-  User.hasMany(models.Transaction, {
+  User.hasMany(models.transaction, {
     foreignKey: 'userId'
   });
 };

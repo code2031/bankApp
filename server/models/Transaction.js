@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Transaction = sequelize.define('Transaction', {
+  const Transaction = sequelize.define('transaction', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     accountNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: false,
       validate: {
         notEmpty: {
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: false,
       validate: {
         notEmpty: {
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     accountName: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
       validate: {
         notEmpty: {
@@ -40,12 +40,14 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-  }, {});
+  }, {
+    freezeTableName: true,
+  });
   Transaction.associate = function(models) {
     // associations can be defined here
-    Transaction.belongsTo(models.User, {
+    Transaction.belongsTo(models.user, {
       foreignKey: 'userId',
-      as: 'users',
+      as: 'user',
       onDelete: 'CASCADE',
     });
   };

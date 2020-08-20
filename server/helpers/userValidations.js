@@ -1,10 +1,14 @@
-import { User } from '../models';
+import  Model  from '../models';
 import { validName, validEmail, validPhoneNumber } from "./regEx";
 
-const checkEmail = (email) => User.findOne({
+const checkEmail = (email) => Model.user.findOne({
   where: { email }
-});
-
+}); 
+ 
+const checkPhoneNumber = (phoneNumber) => Model.user.findOne({
+  where: { phoneNumber }
+}); 
+ 
 /**
  * @description validate user details
  * @class validateDetails
@@ -17,16 +21,12 @@ export default class validations {
    * @returns {Array} signupErrors
    */
   static async signupValidations(body) {
-    const {
-      firstName,
-      lastName,
-      middleName,
-      phoneNumber,
-      email,
-      password,
-      confirmPassword,
+    const { firstName, lastName, middleName, phoneNumber, email, password, confirmPassword,
     } = body;
+    
     const signupErrors = {};
+    const emailAlreadyExist = await checkEmail(email);  
+    const phoneNumbeAlreadyExist = await checkPhoneNumber(phoneNumber);  
 
     if (!firstName || firstName.length < 3 || !validName.test(firstName)) {
       signupErrors.firstName = [];
@@ -55,19 +55,22 @@ export default class validations {
         "Phone Number is required and must be up to 11 digits"
       );
     }
+    if (phoneNumbeAlreadyExist) {
+      signupErrors.phoneNumber = [];
+      signupErrors.phoneNumber.push(
+        "Phone Number already exist"
+      );
+    }
 
     if (!email || !validEmail.test(email)) {
       signupErrors.email = [];
       signupErrors.email.push("Invalid Email Format");
     }
-
-    /* const emailAlreadyExist = checkEmail(email); 
-    console.log('hello email: ', emailAlreadyExist);
-/*  
+ 
     if (emailAlreadyExist) {
       signupErrors.email = [];
       signupErrors.email.push("Email already exist");
-    } */
+    } 
 
     if (!password || password.length < 3) {
       signupErrors.password = [];
