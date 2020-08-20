@@ -1,10 +1,11 @@
 import  Model  from '../models';
 import { validName, validEmail, validPhoneNumber } from "./regEx";
 
+//Check if email already in the database
 const checkEmail = (email) => Model.user.findOne({
   where: { email }
 }); 
- 
+//Check if phoneNumber already in the database
 const checkPhoneNumber = (phoneNumber) => Model.user.findOne({
   where: { phoneNumber }
 }); 
@@ -119,6 +120,7 @@ export default class validations {
     const { firstName, lastName, email } = body;
     const editErrors = [];
     const emailAlreadyExist = await checkEmail(email);
+    const phoneNumbeAlreadyExist = await checkPhoneNumber(phoneNumber);
 
     if (!email || !validEmail.test(email)) {
       editErrors.push({
@@ -130,7 +132,7 @@ export default class validations {
       emailAlreadyExist.dataValues.id !== userId
     ) {
       editErrors.push({
-        Email: "User already exist",
+        Email: "User with this email already exist",
       });
     }
 

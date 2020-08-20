@@ -31,14 +31,3 @@ export const validateEdit = async (req, res, next) => {
   }
   return next();
 };
-
-export const validateProfile = async (req, res, next) => {
-  const userId = parseInt(req.decoded.userId);
-  const errors = await validation.profileValidation(req.body, userId);
-  if (errors[0]) {
-    return res.status(401).json({
-      errors
-    });
-  }
-  return next();
-};
