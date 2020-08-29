@@ -8,7 +8,8 @@ const verifyToken = (req, res, next) => {
   const header = req.headers.Authorization || req.headers.authorization || req.query.Authorization;
   if (typeof header !== 'undefined') {
     try {
-      const token = header;
+      // const token = header; // With React
+       const token = header.split(' ')[1]; // Without React
       req.decoded = jwt.verify(token, secret);
       next();
     } catch (error) {

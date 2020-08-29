@@ -39,7 +39,7 @@ export default class Users {
       });
       return res.status(201).json({
         message: 'User successfully created',
-        token: await createToken(createUser.dataValues)
+        token: await createToken(createUser)
       });
     });
   } 
@@ -73,6 +73,37 @@ export default class Users {
       });
     }
   }
+
+
+  /**
+     * @description Edit user details
+     * @method editDetails
+     * @param {*} req
+     * @param {*} res
+     */
+    static async editDetails(req, res) {
+      const userId = parseInt(req.decoded.userId);
+      const userFound = await Model.user.findOne({
+        where: { id: userId }
+      });
+  
+      if (userFound) {
+        await userFound.update({
+          firstName: req.body.firstName || userFound.firstName,
+          lastName: req.body.lastName || userFound.lastName,
+          middleName: req.body.middleName || userFound.middleName,
+          email: req.body.email || userFound.email,
+          phoneNumber: req.body.phoneNumber || userFound.phoneNumber
+        });
+        return res.status(200).json({
+          message: 'User updated successfully!',
+          userFound
+        });
+      }
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
 
     /**
      * @description fetch all users from database

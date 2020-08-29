@@ -24,10 +24,9 @@ export default class validations {
   static async signupValidations(body) {
     const { firstName, lastName, middleName, phoneNumber, email, password, confirmPassword,
     } = body;
-    
     const signupErrors = {};
     const emailAlreadyExist = await checkEmail(email);  
-    const phoneNumbeAlreadyExist = await checkPhoneNumber(phoneNumber);  
+    const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber);  
 
     if (!firstName || firstName.length < 3 || !validName.test(firstName)) {
       signupErrors.firstName = [];
@@ -56,7 +55,7 @@ export default class validations {
         "Phone Number is required and must be up to 11 digits"
       );
     }
-    if (phoneNumbeAlreadyExist) {
+    if (phoneNumberAlreadyExist) {
       signupErrors.phoneNumber = [];
       signupErrors.phoneNumber.push(
         "Phone Number already exist"
@@ -117,36 +116,53 @@ export default class validations {
    * @returns {Array} editErrors
    */
   static async editValidations(body, userId) {
-    const { firstName, lastName, email } = body;
-    const editErrors = [];
+    const { firstName, lastName, middleName, email, phoneNumber } = body;
+    const editErrors = {};
     const emailAlreadyExist = await checkEmail(email);
-    const phoneNumbeAlreadyExist = await checkPhoneNumber(phoneNumber);
+    const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber);
 
-    if (!email || !validEmail.test(email)) {
-      editErrors.push({
-        Email: "Invalid Email Format",
-      });
-    }
-    if (
-      emailAlreadyExist.dataValues.email.length > 0 &&
-      emailAlreadyExist.dataValues.id !== userId
-    ) {
-      editErrors.push({
-        Email: "User with this email already exist",
-      });
-    }
+    console.log('EMAIL ADDRESS HERE: ', emailAlreadyExist );
+    console.log('PHONE NUMBER HERE: ' , phoneNumberAlreadyExist);
 
     if (!firstName || firstName.length < 3 || !validName.test(firstName)) {
-      editErrors.push({
-        firstName: "First Name must be at least three alphabetical characters",
-      });
+      editErrors.firstName = [];
+      editErrors.firstName.push("First Name must be at least three alphabetical characters");
     }
 
     if (!lastName || lastName.length < 3 || !validName.test(lastName)) {
-      editErrors.push({
-        lastName: "Last Name must be at least three alphabetical characters",
-      });
+      editErrors.lastName = [];
+      editErrors.lastName.push("Last Name must be at least three alphabetical characters");
+    }
+
+    if (!middleName || middleName.length < 3 || !validName.test(middleName)) {
+      editErrors.middleName = [];
+      editErrors.middleName.push("Middle Name must be at least three alphabetical characters");
+    }
+    if (!email || !validEmail.test(email)) {
+      editErrors.email = [];
+      editErrors.email.push("Invalid Email Format");
+    }
+    if (emailAlreadyExist.dataValues.email.length > 0 && emailAlreadyExist.dataValues.id !== userId
+    ) {
+      editErrors.email = [];
+      editErrors.email.push("User with this email already exist");
+    }
+
+    if (!phoneNumber || !validPhoneNumber.test(phoneNumber)) {
+      editErrors.phoneNumber = [];
+      editErrors.phoneNumber.push("Phone Number is required and must be up to 11 digits" );
+    }
+    
+    if (
+      phoneNumberAlreadyExist.dataValues.phoneNumber.length > 0 &&
+      phoneNumberAlreadyExist.dataValues.id !== userId
+    ) {
+      editErrors.phoneNumber = [];
+      editErrors.phoneNumber.push("User with this phone number already exist");
     }
     return editErrors;
+
   }
+
+
 }

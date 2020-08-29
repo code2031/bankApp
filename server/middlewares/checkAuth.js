@@ -1,7 +1,7 @@
-import { User } from '../models';
+import Model from '../models';
 
 export const isUserValid = async ({ decoded: { userId } }, res, next) => {
-  const userFound = await User.findOne({
+  const userFound = await Model.user.findOne({
     where: { id: userId }
   });
   if (userFound) {
@@ -13,7 +13,7 @@ export const isUserValid = async ({ decoded: { userId } }, res, next) => {
 };
 
 export const isUserAdmin = async ({ decoded: { userId } }, res, next) => {
-  const userFound = await User.findOne({
+  const userFound = await Model.user.findOne({
     where: { id: userId }
   });
   if (userFound.role === 1) {
