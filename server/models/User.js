@@ -39,7 +39,6 @@ middleName: {
 email: {
   type: DataTypes.STRING(20),
   allowNull: false,
-  unique: true,
   validate: {
     notEmpty: {
       args: true,
@@ -63,7 +62,6 @@ password: {
 phoneNumber: {
   type: DataTypes.STRING(255),
   allowNull: false,
-  unique: true,
   validate: {
     notEmpty: {
       args: true,

@@ -22,8 +22,7 @@ export default class validations {
    * @returns {Array} signupErrors
    */
   static async signupValidations(body) {
-    const { firstName, lastName, middleName, phoneNumber, email, password, confirmPassword,
-    } = body;
+    const { firstName, lastName, middleName, phoneNumber, email, password, confirmPassword } = body;
     const signupErrors = {};
     const emailAlreadyExist = await checkEmail(email);  
     const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber);  
@@ -120,9 +119,6 @@ export default class validations {
     const editErrors = {};
     const emailAlreadyExist = await checkEmail(email);
     const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber);
-
-    console.log('EMAIL ADDRESS HERE: ', emailAlreadyExist );
-    console.log('PHONE NUMBER HERE: ' , phoneNumberAlreadyExist);
 
     if (!firstName || firstName.length < 3 || !validName.test(firstName)) {
       editErrors.firstName = [];

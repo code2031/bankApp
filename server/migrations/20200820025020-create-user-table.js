@@ -42,7 +42,6 @@ module.exports = {
       email: {
         type: Sequelize.STRING(20),
         allowNull: false,
-        unique: true,
         validate: {
           notEmpty: {
             args: true,
@@ -66,7 +65,6 @@ module.exports = {
       phoneNumber: {
         type: Sequelize.STRING(255),
         allowNull: false,
-        unique: true,
         validate: {
           notEmpty: {
             args: true,
