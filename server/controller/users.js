@@ -88,7 +88,7 @@ export default class Users {
       });
   
       if (userFound) {
-        await userFound.update({
+        userFound.update({
           firstName: req.body.firstName || userFound.firstName,
           lastName: req.body.lastName || userFound.lastName,
           middleName: req.body.middleName || userFound.middleName,
