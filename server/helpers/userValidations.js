@@ -118,8 +118,7 @@ export default class validations {
     const { firstName, lastName, middleName, email, phoneNumber } = body;
     const editErrors = {};
     const emailAlreadyExist = await checkEmail(email);
-    const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber);
-    console.log('hello emailAlreadyExist:', emailAlreadyExist.dataValues.email);
+    const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber); 
 
     if (!firstName || firstName.length < 3 || !validName.test(firstName)) {
       editErrors.firstName = [];
