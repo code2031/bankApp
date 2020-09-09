@@ -10,13 +10,15 @@ A bank application demo that enables users to create a account, deposit ,withdra
 
 A bank application demo that enables users to create an account, deposit ,withdraw, transer, check balance and apply for a loan.
 
-User can create account
-User can deposit money  into his/her own account
-User can withdraw money from  his/her own account
-User can check his/her account balance
-User can transfer money into another user's account
-User can receive money from another user's account
-User can apply for a loan
+<ul>
+<li>User can create account </li>
+<li>User can deposit money  into his/her own account </li>
+<li> User can withdraw money from  his/her own account</li>
+<li> User can check his/her account balance </li>
+<li> User can transfer money into another user's account </li>
+<li> User can receive money from another user's account </li>
+<li> User can apply for a loan </li>
+</ul> 
 
 ## Technologies
 
