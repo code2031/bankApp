@@ -120,8 +120,6 @@ export default class validations {
     const emailAlreadyExist = await checkEmail(email);
     const phoneNumberAlreadyExist = await checkPhoneNumber(phoneNumber); 
 
-    console.log('EMAIL GOES HERE : ', emailAlreadyExist)
-
     if (!firstName || firstName.length < 3 || !validName.test(firstName)) {
       editErrors.firstName = [];
       editErrors.firstName.push("First Name must be at least three alphabetical characters");
@@ -140,7 +138,7 @@ export default class validations {
       editErrors.email = [];
       editErrors.email.push("Invalid Email Format");
     }
-    if (emailAlreadyExist != null && emailAlreadyExist.dataValues.email.length > 0 && emailAlreadyExist.dataValues.id !== userId
+    if (emailAlreadyExist !== null && emailAlreadyExist.dataValues.email.length > 0 && emailAlreadyExist.dataValues.id !== userId
     ) {
       editErrors.email = [];
       editErrors.email.push("User with this email already exist");
