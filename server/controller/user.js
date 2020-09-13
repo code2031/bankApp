@@ -13,10 +13,10 @@ const accountNumber = () => {
 };
 
 /**
- * @description users controller
- * class users
+ * @description user controller
+ * class user
  */
-export default class Users {
+export default class User {
     /**
      * @description signup a user into database
      * @method userRegister
@@ -35,6 +35,7 @@ export default class Users {
         password: hash, 
         phoneNumber,
         accountNumber: accountNumber(),
+        loanBalance : 0,
         role: 0
       });
       return res.status(201).json({
@@ -74,14 +75,13 @@ export default class Users {
     }
   }
 
-
   /**
      * @description Edit user details
      * @method editDetails
      * @param {*} req
      * @param {*} res
      */
-    static async editDetails(req, res) {
+    static async editProfile(req, res) {
       const userId = parseInt(req.decoded.userId);
       const userFound = await Model.user.findOne({
         where: { id: userId }

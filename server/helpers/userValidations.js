@@ -12,9 +12,9 @@ const checkPhoneNumber = (phoneNumber) => Model.user.findOne({
  
 /**
  * @description validate user details
- * @class validateDetails
+ * @class Validations
  */
-export default class validations {
+export default class Validations {
   /**
    * @description validate user details
    * @function signupValidations

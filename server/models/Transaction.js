@@ -30,6 +30,26 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    transactionType: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Transaction type field cannot be empty'
+        }
+      }
+    },
+    referenceNumber: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Reference number type field cannot be empty'
+        }
+      }
+    },
     accountName: {
       type: DataTypes.STRING(255),
       allowNull: false,
