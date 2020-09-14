@@ -1,5 +1,4 @@
 import Model from "../models";
-import { use } from "chai";
 
 const referenceNumber = () => {
   let numbers = "REF";
@@ -22,43 +21,83 @@ export default class Transaction {
    * @param {*} res
    */
   static async depositMoney(req, res) {
-    const amount  = parseFloat(req.body.amount);
+    const amount = parseInt(req.body.amount);
     const userId = parseInt(req.decoded.userId);
 
-   // Fetch the user
+    // Fetch the user
     const userFound = await Model.user.findOne({
-      where: { id: userId }
+      where: { id: userId },
     });
-    
+
     // If the user is found
     if (userFound) {
-    const newBalance = amount + parseInt(userFound.accountBalance);
-    const depositorName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
-      console.log('LOAN BALANCE : ', userFound.loanBalance );
+      const loanBalance = parseInt(userFound.loanBalance);
+      const accountBalance = parseInt(userFound.accountBalance);
 
-    // Deposit money into transaction table
-      await Model.transaction.create({
-        userId: userFound.id,
-        accountNumber: userFound.accountNumber,
-        amount: amount,
-        transactionType: 'Deposit',
-        referenceNumber: referenceNumber(),
-        accountName: depositorName
-      });
+      // Check if amount to be deposited greater than or equal loan 
+      if (loanBalance >= 0 && amount >= loanBalance) {
+        const amountRemain = amount - loanBalance;
+        const newBalance = amountRemain + accountBalance;
+        const depositorName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
+        
+        // Deposit money into transaction table
+        await Model.transaction.create({
+          userId: userFound.id,
+          accountNumber: userFound.accountNumber,
+          amount: amount,
+          transactionType: "Deposit",
+          referenceNumber: referenceNumber(),
+          accountName: depositorName
+        });
 
-    // Update user's account balance in users table
-      await userFound.update({
-        accountBalance : newBalance
-      });
-    
-    // Get a feedback message
-      return res.status(200).json({
-        message: "Transaction successful!",
-        accountBalance: userFound.accountBalance,
-      });
+        // Update user's account /balance in users table
+        await userFound.update({
+          accountBalance: newBalance,
+          loanBalance: 0
+        });
+
+        // Get a feedback message
+        return res.status(200).json({
+          message: "Transaction successful!",
+          report: "Loan Calculated!",
+          amountDeposited: amountRemain,
+          accountBalance: userFound.accountBalance,
+          loanBalance: userFound.loanBalance
+        });
+      }
+
+      // Check if loan is greater than amount to be deposited
+      if (loanBalance >= 0 && loanBalance > amount) {
+        const newLoanBalance =  loanBalance - amount ; 
+        const depositorName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
+        // Deposit money into transaction table
+        await Model.transaction.create({
+          userId: userFound.id,
+          accountNumber: userFound.accountNumber,
+          amount: amount,
+          transactionType: "Deposit",
+          referenceNumber: referenceNumber(),
+          accountName: depositorName
+        });
+
+        // Update user's account balance in users table
+        await userFound.update({ 
+          loanBalance: newLoanBalance
+        });
+
+        // Get a feedback message
+        return res.status(200).json({
+          message: "Transaction successful!",
+          report: "Loan Deducted!",
+          amountDeposited: 0,
+          loanBalance: userFound.loanBalance,
+          accountBalance: userFound.accountBalance
+        });
+      }
+
     }
     return res.status(404).json({
-      message: "User not found",
+      message: "User not found"
     });
   }
 }
