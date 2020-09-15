@@ -99,7 +99,7 @@ export default class Transaction {
     });
   }
 
-  static async withDrawMoney(req, res) {
+  static async withdrawMoney(req, res) {
     const amount = parseInt(req.body.amount);
     const userId = parseInt(req.decoded.userId);
 

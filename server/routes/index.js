@@ -16,6 +16,6 @@ app.get('/users/:userId', user.getSingleUser);
 
 // Transaction Routes
 app.post('/deposit', verifyToken, isUserValid, validateAmount, transaction.depositMoney);
-app.post('/withdraw', verifyToken, isUserValid, checkAccountBalance, transaction.withDrawMoney);
+app.post('/withdraw', verifyToken, isUserValid, checkAccountBalance, transaction.withdrawMoney);
 
 export default app
