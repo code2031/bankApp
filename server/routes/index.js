@@ -4,7 +4,7 @@ import transaction from '../controller/transaction';
 import verifyToken from '../middlewares/verifyToken';
 import { isUserValid, isUserAdmin } from '../middlewares/checkAuth';
 import { validateSignup, validateSignin, validateEdit } from '../middlewares/userCredentials';
-import { validateAmount } from '../middlewares/transactionCredentials';
+import { validateAmount, checkAccountBalance } from '../middlewares/transactionCredentials';
 const app = express.Router();
 
 // User Routes
@@ -16,5 +16,6 @@ app.get('/users/:userId', user.getSingleUser);
 
 // Transaction Routes
 app.post('/deposit', verifyToken, isUserValid, validateAmount, transaction.depositMoney);
+app.post('/withdraw', verifyToken, isUserValid, checkAccountBalance, transaction.withDrawMoney);
 
 export default app
