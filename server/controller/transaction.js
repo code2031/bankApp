@@ -1,5 +1,6 @@
 import Model from "../models";
 
+// Generate random numbers for reference purpose
 const referenceNumber = () => {
   let numbers = "REF";
   for (let i = 1; i <= 7; i++) {
@@ -7,6 +8,18 @@ const referenceNumber = () => {
   }
   return numbers;
 };
+
+// Insert into transaction table for transaction history purpose.
+const createTransaction =  (userFound ,amount, message, reference, accountName ) => {
+    Model.transaction.create({
+    userId: userFound.id,
+    accountNumber: userFound.accountNumber,
+    amount,
+    transactionType: message,
+    referenceNumber: reference,
+    accountName
+  });
+}
 
 /**
  * @description transaction controller
@@ -38,7 +51,7 @@ export default class Transaction {
       if (loanBalance >= 0 && amount >= loanBalance) {
         const amountRemain = amount - loanBalance;
         const newBalance = amountRemain + accountBalance;
-        const depositorName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
+        const accountName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
 
         // Update user's account /balance in users table
         await userFound.update({
@@ -47,14 +60,8 @@ export default class Transaction {
         });
 
         // Transaction table
-        await Model.transaction.create({
-          userId: userFound.id,
-          accountNumber: userFound.accountNumber,
-          amount: amount,
-          transactionType: "Deposit",
-          referenceNumber: referenceNumber(),
-          accountName: depositorName,
-        });
+    await createTransaction (userFound, amount, "Deposit", referenceNumber(), accountName );
+
         // Get a feedback message
         return res.status(200).json({
           message: "Transaction successful!",
@@ -68,7 +75,7 @@ export default class Transaction {
       // Check if loan is greater than amount to be deposited
       if (loanBalance >= 0 && loanBalance > amount) {
         const newLoanBalance = loanBalance - amount;
-        const depositorName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
+        const accountName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
 
         // Update user's account balance in users table
         await userFound.update({
@@ -76,14 +83,7 @@ export default class Transaction {
         });
 
         // Transaction table
-        await Model.transaction.create({
-          userId: userFound.id,
-          accountNumber: userFound.accountNumber,
-          amount: amount,
-          transactionType: "Deposit",
-          referenceNumber: referenceNumber(),
-          accountName: depositorName,
-        });
+        await createTransaction (userFound, amount, "Deposit", referenceNumber(), accountName );
         // Get a feedback message
         return res.status(200).json({
           message: "Transaction successful!",
@@ -109,7 +109,7 @@ export default class Transaction {
     });
 
     const newBalance = userFound.accountBalance - amount;
-    const depositorName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
+    const accountName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
 
     // Update user's account balance in users table
     await userFound.update({
@@ -117,14 +117,8 @@ export default class Transaction {
     });
 
     // Transaction table
-    await Model.transaction.create({
-      userId: userFound.id,
-      accountNumber: userFound.accountNumber,
-      amount: amount,
-      transactionType: "Withdraw",
-      referenceNumber: referenceNumber(),
-      accountName: depositorName,
-    });
+    await createTransaction (userFound, amount, "Withdrawal", referenceNumber(), accountName );
+   
     // Get a feedback message
     return res.status(200).json({
       message: "Transaction successful!",
