@@ -149,5 +149,29 @@ export default class User {
       message: 'User not found!'
     });
   }
+
+  /**
+   * @description fetch user's acount balance from database
+   * @method checkBalance
+   * @param {*} req
+   * @param {*} res
+   */
+
+  static async checkBalance ( req, res) {
+    const userId = parseInt(req.decoded.userId);
+    const userFound = await Model.user.findOne({
+      where: { id: userId }
+    });
+    if (userFound) {
+      return res.status(200).json({
+        message: 'Account balance fetched!', 
+        accountBalance: userFound.accountBalance
+      })
+    }
+    return res.status(404).json({
+      message: 'User not found!'
+    });
+
+  }
   
 }

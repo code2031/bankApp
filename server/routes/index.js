@@ -5,6 +5,7 @@ import verifyToken from '../middlewares/verifyToken';
 import { isUserValid, isUserAdmin } from '../middlewares/checkAuth';
 import { validateSignup, validateSignin, validateEdit } from '../middlewares/userCredentials';
 import { validateAmount, checkAccountBalance } from '../middlewares/transactionCredentials';
+import User from '../controller/user';
 const app = express.Router();
 
 // User Routes
@@ -13,6 +14,7 @@ app.post('/login', validateSignin, user.userLogin);
 app.put('/edit', verifyToken, isUserValid, validateEdit, user.editProfile);
 app.get('/users', user.getAllUsers);
 app.get('/users/:userId', user.getSingleUser);
+app.get('/balance', verifyToken, isUserValid, User.checkBalance);
 
 // Transaction Routes
 app.post('/deposit', verifyToken, isUserValid, validateAmount, transaction.depositMoney);
