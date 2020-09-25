@@ -10,16 +10,16 @@ const referenceNumber = () => {
 };
 
 // Insert into transaction table for transaction history purpose.
-const createTransaction =  (userFound ,amount, message, reference, accountName ) => {
-    Model.transaction.create({
-    userId: userFound.id,
-    accountNumber: userFound.accountNumber,
+const createTransaction = ( user, userAccount, amount, message, reference, accountName) => {
+  Model.transaction.create({
+    userId: user.id,
+    accountNumber: userAccount.accountNumber,
     amount,
     transactionType: message,
     referenceNumber: reference,
-    accountName
+    accountName,
   });
-}
+};
 
 /**
  * @description transaction controller
@@ -60,7 +60,7 @@ export default class Transaction {
         });
 
         // Transaction table
-    await createTransaction (userFound, amount, "Deposit", referenceNumber(), accountName );
+        await createTransaction( userFound, userFound, amount, "Deposit", referenceNumber(), accountName );
 
         // Get a feedback message
         return res.status(200).json({
@@ -83,7 +83,9 @@ export default class Transaction {
         });
 
         // Transaction table
-        await createTransaction (userFound, amount, "Deposit", referenceNumber(), accountName );
+        await createTransaction( userFound, userFound, amount, "Deposit", referenceNumber(),
+          accountName  );
+
         // Get a feedback message
         return res.status(200).json({
           message: "Transaction successful!",
@@ -98,6 +100,13 @@ export default class Transaction {
       message: "User not found",
     });
   }
+
+  /**
+   * @description withdraw money from personal account
+   * @method withdrawMoney
+   * @param {*} req
+   * @param {*} res
+   */
 
   static async withdrawMoney(req, res) {
     const amount = parseInt(req.body.amount);
@@ -117,8 +126,8 @@ export default class Transaction {
     });
 
     // Transaction table
-    await createTransaction (userFound, amount, "Withdrawal", referenceNumber(), accountName );
-   
+    await createTransaction( userFound, userFound, amount, "Withdrawal", referenceNumber(), accountName);
+
     // Get a feedback message
     return res.status(200).json({
       message: "Transaction successful!",
@@ -127,5 +136,53 @@ export default class Transaction {
       accountBalance: userFound.accountBalance,
       loanBalance: userFound.loanBalance,
     });
+  }
+
+  /**
+   * @description transfer money from anothe user's account
+   * @method transferMoney
+   * @param {*} req
+   * @param {*} res
+   */
+  static async transferMoney(req, res) {
+    const { amount, accountNumber } = req.body;
+    const userId = parseInt(req.decoded.userId); 
+     // Fetch sender
+    const senderFound = await Model.user.findOne({
+      where: { id: userId }
+    });
+    const sendertName = `${senderFound.lastName} ${senderFound.firstName} ${senderFound.middleName}`;
+    // Fetch receiver
+    const receiverFound = await Model.user.findOne({
+      where: { accountNumber }
+    });
+    const receiverName = `${receiverFound.lastName} ${receiverFound.firstName} ${receiverFound.middleName}`;
+
+    if (senderFound) {
+      const newBalance = parseInt(senderFound.accountBalance) - parseInt(amount);
+      // Update user's account balance in users table
+      await senderFound.update({
+        accountBalance: newBalance
+      });
+      // Transaction table
+      await createTransaction( senderFound, receiverFound, amount, "Transfer", referenceNumber(), receiverName);
+  
+    }
+    if (receiverFound) {
+      const newBalance = parseInt(receiverFound.accountBalance) + parseInt(amount);
+
+      // Update user's account balance in users table
+      await receiverFound.update({
+        accountBalance: newBalance
+      });
+      // Transaction table
+      await createTransaction(receiverFound, senderFound, amount, "Receival", referenceNumber(), sendertName);
+    }
+
+    return res.status(200).json({
+      message : 'Money Successfully Transfered!',
+      accountBalance: senderFound.accountBalance
+    })
+ 
   }
 }

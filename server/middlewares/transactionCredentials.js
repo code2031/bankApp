@@ -10,9 +10,19 @@ export const validateAmount = async (req, res, next) => {
   return next();
 };
 
-export const checkAccountBalance = async (req, res, next) => {
+export const checkAmountAndBalance = async (req, res, next) => {
   const userId = parseInt(req.decoded.userId);
-  const errors = await validation.checkAccount(req.body, userId);
+  const errors = await validation.checkAmountAndBalance(req.body, userId);
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({
+      errors
+    });
+  }
+  return next();
+};
+
+export const checkAccountNumber = async (req, res, next) => {
+  const errors = await validation.checkAccountNumber(req.body);
   if (Object.keys(errors).length > 0) {
     return res.status(400).json({
       errors

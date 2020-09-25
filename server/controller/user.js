@@ -35,6 +35,7 @@ export default class User {
         password: hash, 
         phoneNumber,
         accountNumber: accountNumber(),
+        accountBalance : 0,
         loanBalance : 0,
         role: 0
       });
