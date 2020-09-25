@@ -68,7 +68,7 @@ static async checkAmountAndBalance (body, userId) {
 * @returns {Array} accountErrors
 */
 
-static async checkAccountNumber (body) {
+static async checkAccountNumber (body, userId) {
 const { accountNumber } = body; 
 ;
 
@@ -85,6 +85,10 @@ if (accountNumber) {
       accountErrors.accountNumber = [];
       accountErrors.accountNumber.push("Invalid account number");
     }
+  if ( accountNumberFound !== null && accountNumberFound.dataValues.id == userId) {
+    accountErrors.id = [];
+    accountErrors.id.push("Sorry, you can't do self transfer");
+  }
 }
   return accountErrors;
 

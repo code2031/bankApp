@@ -22,7 +22,8 @@ export const checkAmountAndBalance = async (req, res, next) => {
 };
 
 export const checkAccountNumber = async (req, res, next) => {
-  const errors = await validation.checkAccountNumber(req.body);
+  const userId = parseInt(req.decoded.userId);
+  const errors = await validation.checkAccountNumber(req.body, userId);
   if (Object.keys(errors).length > 0) {
     return res.status(400).json({
       errors
