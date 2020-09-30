@@ -1,8 +1,8 @@
-import Model from "../models";
+import Model from '../models';
 
 // Generate random numbers for reference purpose
 const referenceNumber = () => {
-  let numbers = "REF";
+  let numbers = 'REF';
   for (let i = 1; i <= 7; i++) {
     numbers += Math.floor(Math.random() * 10);
   }
@@ -60,12 +60,12 @@ export default class Transaction {
         });
 
         // Transaction table
-        await createTransaction( userFound, userFound, amount, "Deposit", referenceNumber(), accountName );
+        await createTransaction( userFound, userFound, amount, 'Deposit', referenceNumber(), accountName );
 
         // Get a feedback message
         return res.status(200).json({
-          message: "Transaction successful!",
-          report: "Loan Calculated!",
+          message: 'Transaction successful!',
+          report: 'Loan Calculated!',
           amountDeposited: amountRemain,
           accountBalance: userFound.accountBalance,
           loanBalance: userFound.loanBalance,
@@ -83,13 +83,13 @@ export default class Transaction {
         });
 
         // Transaction table
-        await createTransaction( userFound, userFound, amount, "Deposit", referenceNumber(),
+        await createTransaction( userFound, userFound, amount, 'Deposit', referenceNumber(),
           accountName  );
 
         // Get a feedback message
         return res.status(200).json({
-          message: "Transaction successful!",
-          report: "Loan Deducted!",
+          message: 'Transaction successful!',
+          report: 'Loan Deducted!',
           amountDeposited: 0,
           accountBalance: userFound.accountBalance,
           loanBalance: userFound.loanBalance,
@@ -97,7 +97,7 @@ export default class Transaction {
       }
     }
     return res.status(404).json({
-      message: "User not found",
+      message: 'User not found',
     });
   }
 
@@ -126,12 +126,12 @@ export default class Transaction {
     });
 
     // Transaction table
-    await createTransaction( userFound, userFound, amount, "Withdrawal", referenceNumber(), accountName);
+    await createTransaction( userFound, userFound, amount, 'Withdrawal', referenceNumber(), accountName);
 
     // Get a feedback message
     return res.status(200).json({
-      message: "Transaction successful!",
-      report: "Money Withdrawn!",
+      message: 'Transaction successful!',
+      report: 'Money Withdrawn!',
       amountWithdrawn: amount,
       accountBalance: userFound.accountBalance,
       loanBalance: userFound.loanBalance,
@@ -165,7 +165,7 @@ export default class Transaction {
         accountBalance: newBalance
       });
       // Transaction table
-      await createTransaction( senderFound, receiverFound, amount, "Transfer", referenceNumber(), receiverName);
+      await createTransaction( senderFound, receiverFound, amount, 'Transfer', referenceNumber(), receiverName);
   
     }
     if (receiverFound) {
@@ -176,7 +176,7 @@ export default class Transaction {
         accountBalance: newBalance
       });
       // Transaction table
-      await createTransaction(receiverFound, senderFound, amount, "Receival", referenceNumber(), sendertName);
+      await createTransaction(receiverFound, senderFound, amount, 'Receival', referenceNumber(), sendertName);
     }
 
     return res.status(200).json({
@@ -184,5 +184,37 @@ export default class Transaction {
       accountBalance: senderFound.accountBalance
     })
  
+  }
+
+  static async requestLoan (req, res) {
+    const amount = parseInt(req.body.amount);
+    const userId = parseInt(req.decoded.userId);
+
+    const interest = 0.15 * amount;
+    const loan = amount + interest;
+
+    // Fetch the user
+    const userFound = await Model.user.findOne({
+      where: { id: userId },
+    });
+    if (userFound) {
+      const newBalance = parseInt(userFound.accountBalance) + amount;
+      const accountName = `${userFound.lastName} ${userFound.firstName} ${userFound.middleName}`;
+
+      // Update user's account balance in users table
+      await userFound.update({
+        accountBalance: newBalance,
+        loanBalance: loan
+      });
+      // Transaction table
+      await createTransaction(userFound, userFound, amount, 'Loan', referenceNumber(), accountName);
+    }
+
+    return res.status(200).json({
+      message : 'Loan is Successful!',
+      accountBalance: userFound.accountBalance,
+      loanBalance: userFound.loanBalance
+    })
+
   }
 }
