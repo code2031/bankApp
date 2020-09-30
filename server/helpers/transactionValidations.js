@@ -69,9 +69,7 @@ static async checkAmountAndBalance (body, userId) {
 */
 
 static async checkAccountNumber (body, userId) {
-const { accountNumber } = body; 
-;
-
+const { accountNumber } = body;
 const accountErrors = {};
 
 if (!accountNumber || !validNumber.test(accountNumber)) {
@@ -83,7 +81,7 @@ if (accountNumber) {
     const accountNumberFound = await checkAccount(accountNumber);
   if (accountNumberFound == null) {
       accountErrors.accountNumber = [];
-      accountErrors.accountNumber.push("Invalid account number");
+      accountErrors.accountNumber.push("Account number not found, please check the account number and try again!");
     }
   if ( accountNumberFound !== null && accountNumberFound.dataValues.id == userId) {
     accountErrors.id = [];

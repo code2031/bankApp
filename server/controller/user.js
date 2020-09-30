@@ -158,7 +158,7 @@ export default class User {
    * @param {*} res
    */
 
-  static async checkBalance ( req, res) {
+  static async checkBalance (req, res) {
     const userId = parseInt(req.decoded.userId);
     const userFound = await Model.user.findOne({
       where: { id: userId }
@@ -166,7 +166,8 @@ export default class User {
     if (userFound) {
       return res.status(200).json({
         message: 'Account balance fetched!', 
-        accountBalance: userFound.accountBalance
+        accountBalance: userFound.accountBalance,
+        loanBalance: userFound.loanBalance
       })
     }
     return res.status(404).json({
