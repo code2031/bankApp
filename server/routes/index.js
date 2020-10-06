@@ -6,6 +6,7 @@ import { isUserValid } from '../middlewares/checkAuth';
 import { validateSignup, validateSignin, validateEdit } from '../middlewares/userCredentials';
 import { validateAmount, checkAmountAndAccountBalance, checkAmountAndLoanBalance, checkAccountNumber } from '../middlewares/transactionCredentials';
 import User from '../controller/user';
+
 const app = express.Router();
 
 // User Routes
@@ -22,4 +23,4 @@ app.post('/withdraw', verifyToken, isUserValid, checkAmountAndAccountBalance, tr
 app.post('/transfer', verifyToken, isUserValid, checkAmountAndAccountBalance, checkAccountNumber, transaction.transferMoney);
 app.post('/requestLoan', verifyToken, isUserValid, checkAmountAndLoanBalance, transaction.requestLoan);
 
-export default app
+export default app;

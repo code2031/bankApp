@@ -152,7 +152,7 @@ export default class User {
   }
 
   /**
-   * @description fetch user's acount balance from database
+   * @description fetch user's account and loan balance from database
    * @method checkBalance
    * @param {*} req
    * @param {*} res
@@ -165,7 +165,7 @@ export default class User {
     });
     if (userFound) {
       return res.status(200).json({
-        message: 'Account balance fetched!', 
+        message: 'Balance successfully fetched!', 
         accountBalance: userFound.accountBalance,
         loanBalance: userFound.loanBalance
       })
