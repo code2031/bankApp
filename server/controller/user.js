@@ -1,11 +1,11 @@
 import bcrypt from 'bcryptjs';
 import createToken from '../helpers/createToken';
-import Model from '../models' ;
+import Model from '../models';
 
 const saltRounds = 10;
 
 const accountNumber = () => {
-  let numbers = "52";
+  let numbers = '52';
   for (let i = 1; i <= 8; i++) {
     numbers += Math.floor(Math.random() * 10);
   }
@@ -17,26 +17,26 @@ const accountNumber = () => {
  * class user
  */
 export default class User {
-    /**
+  /**
      * @description signup a user into database
      * @method userRegister
      * @param {*} req
      * @param {*} res
      */
   static async userRegister(req, res) {
-    let createUser; 
-    const { firstName, lastName, middleName, phoneNumber, email, password } = req.body; 
+    let createUser;
+    const { firstName, lastName, middleName, phoneNumber, email, password } = req.body;
     await bcrypt.hash(password, saltRounds, async (error, hash) => {
-    createUser = await Model.user.create({
+      createUser = await Model.user.create({
         firstName,
         lastName,
         middleName,
         email,
-        password: hash, 
+        password: hash,
         phoneNumber,
         accountNumber: accountNumber(),
-        accountBalance : 0,
-        loanBalance : 0,
+        accountBalance: 0,
+        loanBalance: 0,
         role: 0
       });
       return res.status(201).json({
@@ -44,7 +44,7 @@ export default class User {
         token: await createToken(createUser)
       });
     });
-  } 
+  }
 
   /**
    * @description login user from database
@@ -82,31 +82,31 @@ export default class User {
      * @param {*} req
      * @param {*} res
      */
-    static async editProfile(req, res) {
-      const userId = parseInt(req.decoded.userId);
-      const userFound = await Model.user.findOne({
-        where: { id: userId }
+  static async editProfile(req, res) {
+    const userId = parseInt(req.decoded.userId);
+    const userFound = await Model.user.findOne({
+      where: { id: userId }
+    });
+
+    if (userFound) {
+      userFound.update({
+        firstName: req.body.firstName || userFound.firstName,
+        lastName: req.body.lastName || userFound.lastName,
+        middleName: req.body.middleName || userFound.middleName,
+        email: req.body.email || userFound.email,
+        phoneNumber: req.body.phoneNumber || userFound.phoneNumber
       });
-  
-      if (userFound) {
-        userFound.update({
-          firstName: req.body.firstName || userFound.firstName,
-          lastName: req.body.lastName || userFound.lastName,
-          middleName: req.body.middleName || userFound.middleName,
-          email: req.body.email || userFound.email,
-          phoneNumber: req.body.phoneNumber || userFound.phoneNumber
-        });
-        return res.status(200).json({
-          message: 'User updated successfully!',
-          userFound
-        });
-      }
-      return res.status(404).json({
-        message: 'User not found'
+      return res.status(200).json({
+        message: 'User updated successfully!',
+        userFound
       });
     }
+    return res.status(404).json({
+      message: 'User not found'
+    });
+  }
 
-    /**
+  /**
      * @description fetch all users from database
      * @method getAllUsers
      * @param {*} req
@@ -125,7 +125,7 @@ export default class User {
     });
   }
 
-    /**
+  /**
      * @description fetch a single user from database
      * @method getSingleUser
      * @param {*} req
@@ -158,22 +158,20 @@ export default class User {
    * @param {*} res
    */
 
-  static async checkBalance (req, res) {
+  static async checkBalance(req, res) {
     const userId = parseInt(req.decoded.userId);
     const userFound = await Model.user.findOne({
       where: { id: userId }
     });
     if (userFound) {
       return res.status(200).json({
-        message: 'Balance successfully fetched!', 
+        message: 'Balance successfully fetched!',
         accountBalance: userFound.accountBalance,
         loanBalance: userFound.loanBalance
-      })
+      });
     }
     return res.status(404).json({
       message: 'User not found!'
     });
-
   }
-  
 }
