@@ -1,6 +1,8 @@
 import 'idempotent-babel-polyfill';
 import './myConnection'; // Database Connection
 import express from 'express';
+//import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUIExpress from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
 

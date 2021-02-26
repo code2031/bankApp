@@ -4,10 +4,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // Create a connection
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, { 
-    host: process.env.HOST_NAME, 
-    dialect: 'mysql',
-    operatorAliases: false
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+  host: process.env.HOST_NAME,
+  dialect: 'mysql',
+  operatorAliases: false
 });
 
 // Verify the connection
@@ -15,7 +15,7 @@ sequelize.authenticate()
   .then(() => {
     console.log('Database connected...');
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
 

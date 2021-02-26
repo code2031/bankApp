@@ -10,7 +10,7 @@ const referenceNumber = () => {
 };
 
 // Insert into transaction table for transaction history purpose.
-const createTransaction = ( user, userAccount, amount, message, reference, accountName) => {
+const createTransaction = (user, userAccount, amount, message, reference, accountName) => {
   Model.transaction.create({
     userId: user.id,
     accountNumber: userAccount.accountNumber,
@@ -60,7 +60,7 @@ export default class Transaction {
         });
 
         // Transaction table
-        await createTransaction( userFound, userFound, amount, 'Deposit', referenceNumber(), accountName );
+        await createTransaction(userFound, userFound, amount, 'Deposit', referenceNumber(), accountName);
 
         // Get a feedback message
         return res.status(200).json({
@@ -83,8 +83,8 @@ export default class Transaction {
         });
 
         // Transaction table
-        await createTransaction( userFound, userFound, amount, 'Deposit', referenceNumber(),
-          accountName  );
+        await createTransaction(userFound, userFound, amount, 'Deposit', referenceNumber(),
+          accountName);
 
         // Get a feedback message
         return res.status(200).json({
@@ -126,7 +126,7 @@ export default class Transaction {
     });
 
     // Transaction table
-    await createTransaction( userFound, userFound, amount, 'Withdrawal', referenceNumber(), accountName);
+    await createTransaction(userFound, userFound, amount, 'Withdrawal', referenceNumber(), accountName);
 
     // Get a feedback message
     return res.status(200).json({
@@ -146,8 +146,8 @@ export default class Transaction {
    */
   static async transferMoney(req, res) {
     const { amount, accountNumber } = req.body;
-    const userId = parseInt(req.decoded.userId); 
-     // Fetch sender
+    const userId = parseInt(req.decoded.userId);
+    // Fetch sender
     const senderFound = await Model.user.findOne({
       where: { id: userId }
     });
@@ -165,8 +165,7 @@ export default class Transaction {
         accountBalance: newBalance
       });
       // Transaction table
-      await createTransaction( senderFound, receiverFound, amount, 'Transfer', referenceNumber(), receiverName);
-  
+      await createTransaction(senderFound, receiverFound, amount, 'Transfer', referenceNumber(), receiverName);
     }
     if (receiverFound) {
       const newBalance = parseInt(receiverFound.accountBalance) + parseInt(amount);
@@ -180,13 +179,12 @@ export default class Transaction {
     }
 
     return res.status(200).json({
-      message : 'Money Successfully Transfered!',
+      message: 'Money Successfully Transfered!',
       accountBalance: senderFound.accountBalance
-    })
- 
+    });
   }
 
-  static async requestLoan (req, res) {
+  static async requestLoan(req, res) {
     const amount = parseInt(req.body.amount);
     const userId = parseInt(req.decoded.userId);
 
@@ -211,10 +209,9 @@ export default class Transaction {
     }
 
     return res.status(200).json({
-      message : 'Loan is Successful!',
+      message: 'Loan is Successful!',
       accountBalance: userFound.accountBalance,
       loanBalance: userFound.loanBalance
-    })
-
+    });
   }
 }
