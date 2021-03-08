@@ -9,6 +9,8 @@ import { validateAmount, checkAmountAndAccountBalance, checkAmountAndLoanBalance
 
 const app = express.Router();
 
+app.get('/', (req, res) => res.send('Welcome to Banking App Demo'));
+
 // User Routes
 app.post('/register', validateSignup, user.userRegister);
 app.post('/login', validateSignin, user.userLogin);

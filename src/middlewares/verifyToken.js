@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 
-dotenv.config();
 const secret = process.env.JWT_KEY;
 
 const verifyToken = (req, res, next) => {
@@ -9,7 +7,7 @@ const verifyToken = (req, res, next) => {
   if (typeof header !== 'undefined') {
     try {
       // const token = header; // With React
-       const token = header.split(' ')[1]; // Without React
+      const token = header.split(' ')[1]; // Without React
       req.decoded = jwt.verify(token, secret);
       next();
     } catch (error) {
